@@ -65,5 +65,14 @@ public class WxWebCtrl {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/weui")
+	public ModelAndView weui(HttpServletRequest request){
+		ModelAndView mv = new ModelAndView("wxweb/weui");
+		//拦截器已经处理了缓存,这里直接取
+		String openid = WxMemoryCacheClient.getOpenid(request.getSession().getId());
+		mv.addObject("openid", openid);
+		return mv;
+	}
+	
 }
 

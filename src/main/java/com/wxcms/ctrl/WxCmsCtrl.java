@@ -149,5 +149,12 @@ public class WxCmsCtrl {
 		return mv;
 	}
 	
+	//weui 微信网页开发样式库
+	@RequestMapping(value = "/weui")
+	public ModelAndView weui(HttpServletRequest request){
+		ModelAndView mv = new ModelAndView("wxcms/weui");
+		mv.addObject("cur_nav", "weui");
+		return mv;
+	}
 	
 }
