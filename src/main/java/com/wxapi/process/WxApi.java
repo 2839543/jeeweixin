@@ -40,6 +40,9 @@ public class WxApi {
 	//删除菜单
 	private static final String MENU_DELETE = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=%s";
 	
+	//查询菜单 
+	private static final String MENU_GET = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=%s";
+	
 	//获取账号粉丝信息
 	private static final String GET_FANS_INFO = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
 	
@@ -107,6 +110,11 @@ public class WxApi {
 	//获取菜单删除接口
 	public static String getMenuDeleteUrl(String token){
 		return String.format(MENU_DELETE, token);
+	}
+	
+	//获取菜单查询接口
+	public static String getMenuUrl(String token){
+		return String.format(MENU_GET, token);
 	}
 	
 	//获取粉丝信息接口

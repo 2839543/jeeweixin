@@ -190,6 +190,33 @@ public class MyServiceImpl implements MyService{
 		}
 		return rstObj;
 	}
+	
+	//获取菜单
+	public JSONObject getMenu(MpAccount mpAccount){
+		JSONObject jsonObject = WxApiClient.getMenu(mpAccount); 
+		if(jsonObject.containsKey("errcode")){
+			return jsonObject;
+		}
+		List<AccountFans> fansList = new ArrayList<AccountFans>();
+		System.out.println(jsonObject.toString());
+		if(jsonObject.containsKey("menu")){
+			if(jsonObject.getJSONObject("menu").containsKey("button")){
+//				JSONArray openidArr = jsonObject.getJSONObject("data").getJSONArray("openid");
+//				int length = 5;//同步5个
+//				if(openidArr.size() < length){
+//					length = openidArr.size();
+//				}
+//				for(int i = 0; i < length ;i++){
+//					Object openId = openidArr.get(i);
+//					AccountFans fans = WxApiClient.syncAccountFans(openId.toString(), mpAccount);
+//					fansList.add(fans);
+//				}
+//				//批处理
+//				fansDao.addList(fansList);
+			}
+		}
+		return jsonObject;
+	}
 
 	//获取用户列表
 	public boolean syncAccountFansList(MpAccount mpAccount){

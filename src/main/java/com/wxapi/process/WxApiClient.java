@@ -119,6 +119,15 @@ public class WxApiClient {
 		return WxApi.httpsRequest(url, HttpMethod.POST, null);
 	}
 	
+	//获取菜单
+	public static JSONObject getMenu(MpAccount mpAccount){
+		//String accessToken = getAccessToken(mpAccount);
+		
+		String accessToken = "wgck9e9RgrVEFx_K7MRIPeQqdEkVBkMTG8f3VOh8xDirhiJia4eOKS0h5GVNG_cXZVg_D_XRPtNVguE94i5aRZ3S_ppSb9JqSqd2ETyApc8N4-QnTASEMfeH1p2YdfoXDXVdAIAPJH";
+		String url = WxApi.getMenuUrl(accessToken);
+		return WxApi.httpsRequest(url, HttpMethod.GET, null);
+	}
+	
 	//根据openId获取粉丝信息
 	public static AccountFans syncAccountFans(String openId,MpAccount mpAccount){
 		String accessToken = getAccessToken(mpAccount);
