@@ -85,7 +85,9 @@ public class WxApi {
 	//模板消息接口
 	private static final String SEND_TEMPLATE_MESSAGE = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
 	
-	
+	//模板消息接口
+	private static final String GET_SHAKEAROUND_PAGELIST = "https://api.weixin.qq.com/shakearound/statistics/pagelist?access_token=%s";
+		
 	
 	//获取token接口
 	public static String getTokenUrl(String appId,String appSecret){
@@ -186,6 +188,10 @@ public class WxApi {
 		return String.format(SEND_TEMPLATE_MESSAGE, token);
 	}
 	
+	//获取周边摇一摇 页面数据 url
+	public static String getShakearoundPagelistUrl(String token){
+		return String.format(GET_SHAKEAROUND_PAGELIST, token);
+	}
 	
 	
 	/**

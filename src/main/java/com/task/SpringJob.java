@@ -33,6 +33,8 @@ public class SpringJob {
 		logger.info("MyFirstSpringJob trigger..." + count);
 		System.out.println("MyFirstSpringJob trigger..." + count);
 	}
+	
+	
 
 	// 查询微信公众账号菜单
 	public ModelAndView getMenu() {
