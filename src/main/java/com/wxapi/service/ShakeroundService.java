@@ -1,10 +1,8 @@
 package com.wxapi.service;
 
-import net.sf.json.JSONObject;
+import java.util.Date;
 
 import com.wxapi.process.MpAccount;
-import com.wxapi.vo.MsgRequest;
-import com.wxcms.domain.AccountFans;
 
 /**
  * 微信摇一摇周边服务接口，主要用于结合自己的业务和微信接口
@@ -12,7 +10,16 @@ import com.wxcms.domain.AccountFans;
 public interface ShakeroundService {
 	
 	//消息处理
-	public String getPagelist();
+	public boolean getPagelist(Date date,MpAccount mpAccount);
+	
+	//获取页面信息
+	public boolean getPageInfo(String page_ids ,MpAccount mpAccount);
+	
+	//获取页面信息
+	public boolean getZbPagesInfo( MpAccount mpAccount); 
+		
+	//获取页面信息
+	public boolean getZbPagesInfo( Integer begin,Integer  count ,MpAccount mpAccount); 
 	
 }
 

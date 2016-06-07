@@ -1,63 +1,48 @@
 package com.task;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.task.process.TaskApiCtrl;
-import com.wxapi.process.ErrCode;
 import com.wxapi.process.MpAccount;
 import com.wxapi.process.WxMemoryCacheClient;
-import com.wxapi.service.impl.MyServiceImpl;
-
-import net.sf.json.JSONObject;
+import com.wxapi.service.impl.ShakeroundServiceImpl;
 
 @Component
 public class SpringJob {
-	static int count = 0;
+	static int count = 0; 
+	
 	@Autowired
-	private MyServiceImpl myService;
+	private ShakeroundServiceImpl shakeroundService;
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	// @Autowired
-	// TaskApiCtrl task;
-
-	@Scheduled(cron = "0 * * * * ?")
+	private final Logger logger = LoggerFactory.getLogger(this.getClass()); 
+	
+	@Scheduled(cron = "0 0 23 * * ?") //每天晚上23点钟执行
 	public void run() {
-		count++;
-		// task.getMenu();
-		getMenu();
-		logger.info("MyFirstSpringJob trigger..." + count);
-		System.out.println("MyFirstSpringJob trigger..." + count);
+		getShakeroundPage(); 
 	}
 	
-	
-
 	// 查询微信公众账号菜单
-	public ModelAndView getMenu() {
-		System.out.println("---->getMenu now..");
-		JSONObject rstObj = null;
-		MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();// 获取缓存中的唯一账号
-		if (mpAccount != null) {
-			// rstObj = myService.deleteMenu(mpAccount);
-			rstObj = myService.getMenu(mpAccount);
-//			if (rstObj != null && rstObj.getInt("errcode") == 0) {
-//				ModelAndView mv = new ModelAndView("common/success");
-//				mv.addObject("successMsg", "查询菜单成功");
-//				System.out.println("---->getMenu success!");
-//				return mv;
-//			}
+		public void getShakeroundPage() {
+			System.out.println("---->getShakeroundPage now.."); 
+			MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();// 获取缓存中的唯一账号
+			if (mpAccount != null) { 
+				Date date = new Date();
+				 Calendar calendar = new GregorianCalendar();
+				 calendar.setTime(new Date());
+				 calendar.add(Calendar.DATE, -1); 
+				 
+				 calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+				 date = calendar.getTime(); 
+				shakeroundService.getPagelist(date , mpAccount); 
+			}
+			
+			System.out.println("---->getShakeroundPage end.."); 
 		}
-		ModelAndView mv = new ModelAndView("common/failure");
-		String failureMsg = "查询菜单失败";
-		if (rstObj != null) {
-			failureMsg += ErrCode.errMsg(rstObj.getInt("errcode"));
-		}
-		mv.addObject("failureMsg", failureMsg);
-		System.out.println("---->getMenu fail!");
-		return mv;
-	}
 }

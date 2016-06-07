@@ -12,6 +12,8 @@ public class ShakearoundPage extends BaseEntity {
 	private Integer click_uv;// 点击摇周边消息的人数
 	private Integer shake_pv;// 摇周边的次数
 	private Integer shake_uv;// 摇周边的人数
+	private Integer date; //日期
+	
 	public String getPage_id() {
 		return page_id;
 	}
@@ -42,4 +44,11 @@ public class ShakearoundPage extends BaseEntity {
 	public void setShake_uv(Integer shake_uv) {
 		this.shake_uv = shake_uv;
 	}
+	public Integer getDate() {
+		return date;
+	}
+	public void setDate(Integer date) {
+		this.date = date;
+	}
+	
 }

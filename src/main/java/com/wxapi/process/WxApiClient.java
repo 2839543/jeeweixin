@@ -121,9 +121,7 @@ public class WxApiClient {
 	
 	//获取菜单
 	public static JSONObject getMenu(MpAccount mpAccount){
-		//String accessToken = getAccessToken(mpAccount);
-		
-		String accessToken = "wgck9e9RgrVEFx_K7MRIPeQqdEkVBkMTG8f3VOh8xDirhiJia4eOKS0h5GVNG_cXZVg_D_XRPtNVguE94i5aRZ3S_ppSb9JqSqd2ETyApc8N4-QnTASEMfeH1p2YdfoXDXVdAIAPJH";
+		String accessToken = getAccessToken(mpAccount);
 		String url = WxApi.getMenuUrl(accessToken);
 		return WxApi.httpsRequest(url, HttpMethod.GET, null);
 	}
@@ -368,6 +366,50 @@ public class WxApiClient {
 		}
 		return null;
 	}
+	
+	/**
+	 * 获取微信摇周边的页面数据
+	 * @param openid
+	 * @param content 消息内容
+	 * @return
+	 */
+	public static JSONObject getShakearoundPagelist(Integer date, Integer page_index ,MpAccount mpAccount){ 
+		JSONObject postObj = new JSONObject(); 
+		postObj.put("date", date); 
+		postObj.put("page_index", page_index); 
+		String accessToken = getAccessToken(mpAccount);
+		return WxApi.httpsRequest(WxApi.getShakearoundPagelistUrl(accessToken), HttpMethod.POST, postObj.toString());
+ 	}
+
+	/**
+	 * 获取微信摇周边的页面数据(查询指定页面)
+	 * @param type 
+	 * @param page_ids 页面id
+	 * @return
+	 */
+	public static JSONObject getZbPagesInfo(String page_ids,MpAccount mpAccount){ 
+		JSONObject postObj = new JSONObject(); 
+		postObj.put("type", 1); 
+		postObj.put("page_ids", page_ids); 
+		String accessToken = getAccessToken(mpAccount);
+		return WxApi.httpsRequest(WxApi.getZbPageInfoUrl(accessToken), HttpMethod.POST, postObj.toString());
+ 	}
+	
+	/**
+	 * 获取微信摇周边的页面数据(分页查询或者指定范围内的页面)
+	 * @param begin 
+	 * @param count 微信不能超过50个
+	 * @return
+	 */
+	public static JSONObject getZbPagesInfo( Integer begin,Integer  count ,MpAccount mpAccount){ 
+		JSONObject postObj = new JSONObject(); 
+		postObj.put("type", 2); 
+		postObj.put("begin", begin); 
+		postObj.put("count", count); 
+		String accessToken = getAccessToken(mpAccount);
+		return WxApi.httpsRequest(WxApi.getZbPageInfoUrl(accessToken), HttpMethod.POST, postObj.toString());
+ 	}
+	
 	
 	/**
 	 * 创建临时二维码

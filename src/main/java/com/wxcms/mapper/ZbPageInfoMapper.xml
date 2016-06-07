@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.wxcms.mapper.ShakearoundPageDao">
+
+
+	<select id="listForPage" parameterType="com.wxcms.domain.ZbPageInfo" resultType="com.wxcms.domain.ZbPageInfo">
+		SELECT * FROM t_statistics_zb_pageInfo ORDER BY ID DESC
+	</select>
+
+	<select id="getById" parameterType="java.lang.String" resultType="com.wxcms.domain.ZbPageInfo">
+		SELECT * FROM t_statistics_zb_pageInfo WHERE ID = #{id}
+	</select>
+	
+	<select id="getByPageId" parameterType="java.lang.String" resultType="com.wxcms.domain.ZbPageInfo">
+		SELECT * FROM t_statistics_zb_pageInfo WHERE page_id = #{page_id}  ORDER BY ID DESC limit 1
+	</select>
+
+	<insert id="add" parameterType="com.wxcms.domain.ZbPageInfo" flushCache="true">
+		INSERT INTO t_statistics_zb_pageInfo ( ID,COMMENT,DESCRIPTION,ICON_URL,PAGE_ID,PAGE_URL,TITLE,CREATETIME)  VALUES (#{id},#{comment},#{description},#{icon_url},#{page_url},#{title},#{createtime} ) 
+	</insert>
+	<!-- 
+<update id="update" parameterType="com.wxcms.domain.ShakearoundPage" flushCache="true">
+		UPDATE t_wxcms_shakearound_pagelist SET NAME = #{name},ACCOUNT = #{account},APPID = #{appid},APPSECRET = #{appsecret},URL = #{url},TOKEN = #{token},MSGCOUNT = #{msgcount},CREATETIME = #{createtime} WHERE ID = #{id} 
+	</update>
+
+	<delete id="delete" parameterType="com.wxcms.domain.ShakearoundPage" >
+		DELETE FROM t_wxcms_shakearound_pagelist WHERE ID = #{id}
+	</delete>
+	
+	 --> 
+
+	<delete id="delete" parameterType="com.wxcms.domain.ShakearoundPage" >
+		DELETE FROM t_statistics_zb_pageInfo WHERE ID = #{id}
+	</delete>
+
+</mapper>

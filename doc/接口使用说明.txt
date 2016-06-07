@@ -1,0 +1,8 @@
+相关接口说明
+
+微信周边摇一摇数据同步
+
+# 以页面维度获取指定日期的数据到数据库  /wxtask/getShakeroundPage.html?date=yyyyMMdd
+date支持多个日期以逗号分隔，如date=20160601,20160602,20160603,20160604,20160605,20160606
+示例 
+ http://ip:port/jeeweixin/wxtask/getShakeroundPage.html?date=20160607

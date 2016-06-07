@@ -85,9 +85,14 @@ public class WxApi {
 	//模板消息接口
 	private static final String SEND_TEMPLATE_MESSAGE = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
 	
-	//模板消息接口
+	//微信周边摇一摇 页面数据
 	private static final String GET_SHAKEAROUND_PAGELIST = "https://api.weixin.qq.com/shakearound/statistics/pagelist?access_token=%s";
+	
+	//微信周边摇一摇 页面信息
+	private static final String GET_ZB_PAGEINFO = "https://api.weixin.qq.com/shakearound/page/search?access_token=%s";
 		
+	
+	
 	
 	//获取token接口
 	public static String getTokenUrl(String appId,String appSecret){
@@ -193,7 +198,10 @@ public class WxApi {
 		return String.format(GET_SHAKEAROUND_PAGELIST, token);
 	}
 	
-	
+	//获取周边摇一摇 页面信息 url
+	public static String getZbPageInfoUrl(String token){
+		return String.format(GET_ZB_PAGEINFO, token);
+	}
 	/**
 	 * 获取创建临时二维码post data
 	 * @param expireSecodes 该二维码有效时间，以秒为单位。 最大不超过2592000（即30天），此字段如果不填，则默认有效期为30秒。
