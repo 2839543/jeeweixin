@@ -29,111 +29,120 @@ public class ShakeroundServiceImpl implements ShakeroundService {
 
 	@Autowired
 	private ShakearoundPageDao shakearoundPageDao;
-	
+
 	@Autowired
-	private ZbPageInfoDao zbPageInfoDao; 
+	private ZbPageInfoDao zbPageInfoDao;
 
 	/**
 	 * 获取页面统计数据
 	 */
-	public boolean getPagelist(Date date,MpAccount mpAccount) {
-		
+	public boolean getPagelist(Date date, MpAccount mpAccount) {
+
 		boolean hasnext = true;
 		JSONObject jsonObject;
-		int page_index = 0 ; 
-		 
-			Integer i_date =  Integer.parseInt(Long.toString(date.getTime()).substring(0,10));
-			Calendar tmpCalendar = Calendar.getInstance();
-			tmpCalendar.setTime(date);
-			Integer pageDate = Integer.parseInt(DateUtil.getDateText(tmpCalendar.getTime(),"yyyyMMdd"));
-			while (hasnext) {
-				 jsonObject = WxApiClient.getShakearoundPagelist(i_date, ++page_index, mpAccount);
-					if(jsonObject.containsKey("errcode")){
-						if(Integer.parseInt(jsonObject.get("errcode").toString())  > 0) 
-						return false;
+		int page_index = 0;
+
+		Integer i_date = Integer.parseInt(Long.toString(date.getTime()).substring(0, 10));
+		Calendar tmpCalendar = Calendar.getInstance();
+		tmpCalendar.setTime(date);
+		Integer pageDate = Integer.parseInt(DateUtil.getDateText(tmpCalendar.getTime(), "yyyyMMdd"));
+		if (shakearoundPageDao.getByDate(pageDate).size() > 0) {
+			System.out.println(date.toString() + "  data already exists !");
+			return true;
+		}
+
+		while (hasnext) {
+			jsonObject = WxApiClient.getShakearoundPagelist(i_date, ++page_index, mpAccount);
+			if (jsonObject.containsKey("errcode")) {
+				if (Integer.parseInt(jsonObject.get("errcode").toString()) > 0)
+					return false;
+			}
+			List<ShakearoundPage> pageList = new ArrayList<ShakearoundPage>();
+			if (jsonObject.containsKey("data")) {
+				if (jsonObject.getJSONObject("data").containsKey("pages")) {
+					JSONArray pageArr = jsonObject.getJSONObject("data").getJSONArray("pages");
+
+					int length = 50;// 同步50个
+					System.out.println("---->getShakeroundPage apgeArrSize:" + pageArr.size());
+					if (pageArr.size() < length) {
+						length = pageArr.size();
+						hasnext = false;
 					}
-				List<ShakearoundPage> pageList = new ArrayList<ShakearoundPage>();
-				if(jsonObject.containsKey("data")){
-					if(jsonObject.getJSONObject("data").containsKey("pages")){
-						JSONArray pageArr = jsonObject.getJSONObject("data").getJSONArray("pages");
-						
-						int length = 50;//同步50个
-						System.out.println("---->getShakeroundPage apgeArrSize:"+pageArr.size());
-						if(pageArr.size() < length){
-							length = pageArr.size();
-							hasnext = false;
-						}
-						for(int i = 0; i < length ;i++){
-							JSONObject page_json = (JSONObject) pageArr.get(i);
-							ShakearoundPage page = new ShakearoundPage();
-							
-							page.setPage_id(page_json.get("page_id").toString()); 
-							page.setClick_pv( (Integer)page_json.get("click_pv"));
-							page.setClick_uv((Integer)page_json.get("click_uv"));
-							page.setShake_pv((Integer)page_json.get("shake_pv"));
-							page.setShake_uv((Integer)page_json.get("shake_uv"));
-							page.setDate(pageDate);
-							 
-							pageList.add(page);
-							shakearoundPageDao.add(page);
-						} 
-					} 
+					for (int i = 0; i < length; i++) {
+						JSONObject page_json = (JSONObject) pageArr.get(i);
+						ShakearoundPage page = new ShakearoundPage();
+
+						page.setPage_id(page_json.get("page_id").toString());
+						page.setClick_pv((Integer) page_json.get("click_pv"));
+						page.setClick_uv((Integer) page_json.get("click_uv"));
+						page.setShake_pv((Integer) page_json.get("shake_pv"));
+						page.setShake_uv((Integer) page_json.get("shake_uv"));
+						page.setDate(pageDate);
+
+						pageList.add(page);
+						shakearoundPageDao.add(page);
+					}
 				}
 			}
-			return true;
+		}
+		return true;
 	}
 
 	@Override
-	public boolean getPageInfo(String page_ids, MpAccount mpAccount) { 
+	public boolean getPageInfo(String page_ids, MpAccount mpAccount) {
 		WxApiClient.getZbPagesInfo(page_ids, mpAccount);
-		
+
 		return false;
 	}
 
 	@Override
-	public boolean getZbPagesInfo( MpAccount mpAccount) {
-		int begin = 0 ;
-		int count = 50 ;
+	public boolean getZbPagesInfo(MpAccount mpAccount) {
+		int begin = 0;
+		int count = 50;
 		boolean hasmore = true;
 		JSONObject jsonObject;
-		while(hasmore){			
+		while (hasmore) {
 			jsonObject = WxApiClient.getZbPagesInfo(begin, count, mpAccount);
-			
-			if(jsonObject.containsKey("errcode")){
-				if(Integer.parseInt(jsonObject.get("errcode").toString())  > 0) {
-					 System.out.println("errmsg:"+jsonObject.get("errmsg"));
-					 return false;
+
+			if (jsonObject.containsKey("errcode")) {
+				if (Integer.parseInt(jsonObject.get("errcode").toString()) > 0) {
+					System.out.println("errmsg:" + jsonObject.get("errmsg"));
+					return false;
 				}
 			}
-		List<ZbPageInfo> pageList = new ArrayList<ZbPageInfo>();
-		if(jsonObject.containsKey("data")){
-			if(jsonObject.getJSONObject("data").containsKey("pages")){
-				JSONArray pageArr = jsonObject.getJSONObject("data").getJSONArray("pages");
-				 
-				System.out.println("---->getZbPagesInfo apgeArrSize:"+pageArr.size());
-				if(pageArr.size() < count){
-					count = pageArr.size();
-					hasmore = false;
+			if (jsonObject.containsKey("data")) {
+				if (jsonObject.getJSONObject("data").containsKey("pages")) {
+					JSONArray pageArr = jsonObject.getJSONObject("data").getJSONArray("pages");
+
+					System.out.println("---->getZbPagesInfo apgeArrSize:" + pageArr.size());
+					if (pageArr.size() < count) { 
+						hasmore = false;
+					}
+					for (int i = 0; i < pageArr.size()  ; i++) {
+						JSONObject page_json = (JSONObject) pageArr.get(i);
+						ZbPageInfo page = new ZbPageInfo();
+
+						page.setComment(page_json.get("comment").toString());
+						page.setDescription(page_json.get("description").toString());
+						page.setIcon_url(page_json.get("icon_url").toString());
+						page.setPage_id(page_json.get("page_id").toString());
+						page.setPage_url(page_json.get("page_url").toString());
+						page.setTitle(page_json.get("title").toString());
+
+						if(zbPageInfoDao.getByPageId(page.getPage_id()) == null ) {
+							zbPageInfoDao.add(page) ;
+							System.out.println("---->getZbPagesInfo add pageid["+page.getPage_id()+"] Info ");
+						}else {
+							zbPageInfoDao.update(page);
+							System.out.println("---->getZbPagesInfo update page["+page.getPage_id()+"] Info ");
+						}
+					}
 				}
-				for(int i = 0; i < count ;i++){
-					JSONObject page_json = (JSONObject) pageArr.get(i);
-					ZbPageInfo page = new ZbPageInfo();
-					
-					page.setComment(page_json.get("comment").toString()); 
-					page.setDescription( page_json.get("description").toString());
-					page.setIcon_url(page_json.get("icon_url").toString());
-					page.setPage_id(page_json.get("page_id").toString());
-					page.setPage_url(page_json.get("page_url").toString());
-					page.setTitle(page_json.get("title").toString()); 
-					 
-					pageList.add(page);
-					zbPageInfoDao.add(page);
-				} 
-			} 
-		} 
-	}
-		return true; 
-	
+			}
+			begin += count;
+		}
+		return true;
+
 	}
 
 	@Override
@@ -141,5 +150,5 @@ public class ShakeroundServiceImpl implements ShakeroundService {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 }

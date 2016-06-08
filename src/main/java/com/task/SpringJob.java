@@ -16,33 +16,44 @@ import com.wxapi.service.impl.ShakeroundServiceImpl;
 
 @Component
 public class SpringJob {
-	static int count = 0; 
-	
+	static int count = 0;
+
 	@Autowired
 	private ShakeroundServiceImpl shakeroundService;
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass()); 
-	
-	@Scheduled(cron = "0 0 23 * * ?") //每天晚上23点钟执行
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Scheduled(cron = "0 0 23 * * ?") // 每天晚上23点钟执行
 	public void run() {
-		getShakeroundPage(); 
+		getShakeroundPage();
+		getZbPageInfo();
 	}
-	
+
 	// 查询微信公众账号菜单
-		public void getShakeroundPage() {
-			System.out.println("---->getShakeroundPage now.."); 
-			MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();// 获取缓存中的唯一账号
-			if (mpAccount != null) { 
-				Date date = new Date();
-				 Calendar calendar = new GregorianCalendar();
-				 calendar.setTime(new Date());
-				 calendar.add(Calendar.DATE, -1); 
-				 
-				 calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),0,0,0);
-				 date = calendar.getTime(); 
-				shakeroundService.getPagelist(date , mpAccount); 
-			}
-			
-			System.out.println("---->getShakeroundPage end.."); 
+	private void getShakeroundPage() {
+		System.out.println("---->getShakeroundPage now..");
+		MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();// 获取缓存中的唯一账号
+		if (mpAccount != null) {
+			Date date = new Date();
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(new Date());
+			calendar.add(Calendar.DATE, -1);
+
+			calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+					0, 0, 0);
+			date = calendar.getTime();
+			shakeroundService.getPagelist(date, mpAccount);
 		}
+		System.out.println("---->getShakeroundPage end..");
+	}
+
+	// 查询微信周边页面的详细信息
+	private void getZbPageInfo() {
+		System.out.println("---->getZbPageInfo now..");
+		MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();// 获取缓存中的唯一账号
+		if (mpAccount != null) {
+			shakeroundService.getZbPagesInfo(mpAccount);
+		}
+		System.out.println("---->getZbPageInfo end..");
+	}
 }

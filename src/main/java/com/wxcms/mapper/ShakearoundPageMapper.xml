@@ -15,6 +15,11 @@
 	<select id="getByPageId" parameterType="java.lang.String" resultType="com.wxcms.domain.ShakearoundPage">
 		SELECT * FROM t_wxcms_shakearound_pagelist WHERE account = #{account} and  createTime = #{createTime} ORDER BY ID DESC limit 1
 	</select>
+	
+	<select id="getByDate" parameterType="java.lang.Integer" resultType="com.wxcms.domain.ShakearoundPage">
+		SELECT * FROM t_wxcms_shakearound_pagelist WHERE  date = #{date} ORDER BY ID DESC limit 1
+	</select>
+	
 
 	<insert id="add" parameterType="com.wxcms.domain.ShakearoundPage" flushCache="true">
 		INSERT INTO t_wxcms_shakearound_pagelist ( ID,PAGE_ID,CLICK_PV,CLICK_UV,SHAKE_PV,SHAKE_UV,DATE,CREATETIME)  VALUES ( #{id},#{page_id},#{click_pv},#{click_uv},#{shake_pv},#{shake_uv},#{date},#{createtime} ) 

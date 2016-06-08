@@ -6,6 +6,7 @@ public class BaseEntity {
 
 	private Long id;
 	private Date createtime = new Date();//创建时间
+	private Date updatetime =  new Date(); //更新时间
 	
 	
 	public Long getId() {
@@ -20,6 +21,11 @@ public class BaseEntity {
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
-	
+	public Date getUpdateTime() {
+		return updatetime;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updatetime = updateTime;
+	}
 	
 }

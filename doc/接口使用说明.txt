@@ -6,3 +6,7 @@
 date支持多个日期以逗号分隔，如date=20160601,20160602,20160603,20160604,20160605,20160606
 示例 
  http://ip:port/jeeweixin/wxtask/getShakeroundPage.html?date=20160607
+ 
+ # 更新微信周边页面详细信息  /wxtask/wxtask.html 
+ 示例 
+ http://ip:port/jeeweixin/wxtask/getPage.html

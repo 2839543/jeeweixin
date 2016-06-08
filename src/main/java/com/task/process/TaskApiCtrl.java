@@ -64,4 +64,21 @@ public class TaskApiCtrl {
 		System.out.println("---->getShakeroundPage end..");
 		return "查询["+date+"]页面数据成功";
 	}
+	
+	
+	// 查询微信摇周边的页面数据 
+	@RequestMapping(value = "/getPage" )
+	@ResponseBody
+	public String getPageInfo(HttpServletRequest request) {
+		System.out.println("---->getPageInfo now..");
+
+		// 如果是多账号，根据url中的account参数获取对应的MpAccount处理即可
+		MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();// 获取缓存中的唯一账号 
+		if (mpAccount != null) {
+			shakeroundService.getZbPagesInfo(mpAccount); 
+			System.out.println("---->getPageInfo success!"); 
+		}
+		System.out.println("---->getPageInfo end..");
+		return "页面数据更新成功";
+	}
 }

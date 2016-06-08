@@ -10,6 +10,8 @@ public interface ShakearoundPageDao {
 	public ShakearoundPage getById(String id);
 
 	public ShakearoundPage getByPageId(String pageId,Date createTime);
+	
+	public List<ShakearoundPage> getByDate(Integer date);
 
 	public List<ShakearoundPage> listForPage(ShakearoundPage searchEntity);
 
